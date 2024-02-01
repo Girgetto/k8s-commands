@@ -1,0 +1,14 @@
+apiVersion: v1                   # API version for the Service resource
+kind: Service                    # Type of resource to create
+metadata:
+  name: webserver-service        # Name of the Service
+  labels:
+    app: webserver               # Labels to apply to the Service for identifying and organizing resources
+spec:
+  type: ClusterIP                # Type of Service: ClusterIP, NodePort, LoadBalancer, or ExternalName
+  selector:
+    app: webserver               # Selector that determines which Pods the Service routes traffic to
+  ports:
+    - protocol: TCP              # Protocol used by the Service
+      port: 80                   # Port that the Service exposes
+      targetPort: 80             # Port on the Pod to forward traffic to
