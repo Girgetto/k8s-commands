@@ -69,6 +69,56 @@ Expand your `kubectl` toolkit with these commands, tailored for tasks and challe
 - `kubectl label pods <pod-name> key=value`: Add a new label to a pod.  
   _For organizing and selecting subsets of resources._
 
+## Exposing Services
+
+Exposing your application in Kubernetes can be done using various types of Services. Here are commands related to creating and managing Services to expose your applications.
+
+### Creating a Service
+
+- `kubectl expose pod <pod-name> --port=<port> --name=<service-name>`: Create a Service to expose a pod on a specific port.
+  _Exposes a single pod._
+
+- `kubectl expose deployment <deployment-name> --type=NodePort --port=<port>`: Expose a deployment as a Service accessible outside the cluster.
+  _Creates a NodePort Service for broader access._
+
+### Inspecting Services
+
+- `kubectl get services`: List all Services in the current namespace.
+  _Shows all services and their types._
+
+- `kubectl describe service <service-name>`: Show detailed information about a Service.
+  _Provides endpoint, selector, and port details._
+
+## Managing Labels
+
+Labels are key-value pairs attached to objects, such as Pods and Deployments, which are used for organizing and selecting subsets of objects.
+
+### Adding Labels to Objects
+
+- `kubectl label pods <pod-name> key=value`: Add a new label to a Pod.
+  _Helps in categorizing and selecting pods for operations._
+
+- `kubectl label deployment <deployment-name> key=value`: Add a label to a Deployment.
+  _Useful for tracking versions or environments._
+
+### Modifying Labels
+
+- `kubectl label pods <pod-name> key=value --overwrite`: Update an existing label on a Pod.
+  _Adjusts categorization or selection criteria._
+
+### Filtering Resources by Labels
+
+- `kubectl get pods --selector=key=value`: List all Pods that match the given label selector.
+  _Enables targeted operations on a subset of resources._
+
+- `kubectl get all --selector=app=frontend`: List all resources labeled as `app=frontend`.
+  _Useful for comprehensive operations across resource types._
+
+### Removing Labels
+
+- `kubectl label pods <pod-name> key-`: Remove a label from a Pod.
+  _Cleans up or adjusts resource categorization._
+
 - `kubectl annotate pods <pod-name> key=value`: Add an annotation to a pod.  
   _Stores additional, non-identifying information on resources._
 
