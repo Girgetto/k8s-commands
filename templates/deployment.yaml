@@ -18,6 +18,9 @@ spec:
       - name: init-myservice
         image: busybox
         command: ['sh', '-c', 'echo The app is starting; sleep 10'] # Example command
+        volumeMounts:
+        - name: cache-volume     # Mount name, must match the volume name
+          mountPath: /cache      # Path within the container
       containers:
       - name: webserver          # Name of the container within the Pod
         image: nginx:1.17        # Container image to use
@@ -46,4 +49,10 @@ spec:
           limits:
             cpu: "500m"          # Maximum amount of CPU the container can use
             memory: "500Mi"      # Maximum amount of memory the container can use
+        volumeMounts:
+        - name: cache-volume     # Mount name, must match the volume name
+          mountPath: /cache      # Path within the container where the volume should be mounted
       restartPolicy: Always       # Restart policy for all containers within the pod
+      volumes:                    # Define volumes at the pod level
+      - name: cache-volume        # Volume name, referenced by volumeMounts
+        emptyDir: {}              # Type of volume, emptyDir means temporary directory that shares a pod's lifetime
