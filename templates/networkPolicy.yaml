@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1             # API version for NetworkPolicy
+kind: NetworkPolicy                          # Type of resource
+metadata:
+  name: my-network-policy                    # Name of the NetworkPolicy
+  namespace: default                         # Namespace in which the policy is applied
+spec:
+  podSelector:                               # Selector for specifying the pods the policy applies to
+    matchLabels:
+      app: my-application                    # Example label: Apply this policy to pods with the label app=my-application
+  policyTypes:                               # Types of policies (Ingress, Egress, or both)
+    - Ingress                                # This policy controls incoming traffic to pods
+    - Egress                                 # This policy controls outgoing traffic from pods
+  ingress:                                   # Ingress rules (for incoming traffic)
+    - from:                                  # Specifies sources allowed to access the pods
+        - podSelector:
+            matchLabels:
+              app: frontend                 # Example: Allow traffic from pods with label app=frontend
+        - namespaceSelector:
+            matchLabels:
+              project: myproject            # Example: Allow traffic from all pods in namespaces labeled project=myproject
+        - ipBlock:                          # Example: Allow traffic from specific IP ranges
+            cidr: 192.168.5.0/24            # Specifies a specific IP block that can access the pods
+            except:                         
+              - 192.168.5.1/32              # Excludes specific IPs from the allowed range
+      ports:                                # Specifies the ports and protocols allowed
+        - protocol: TCP
+          port: 80                          # Example: Allow TCP traffic on port 80
+  egress:                                   # Egress rules (for outgoing traffic)
+    - to:                                    # Specifies the destinations pods can send traffic to
+        - podSelector:
+            matchLabels:
+              app: database                 # Example: Allow traffic to pods with label app=database
+        - namespaceSelector:
+            matchLabels:
+              project: myproject            # Example: Allow traffic to all pods in namespaces labeled project=myproject
+      ports:
+        - protocol: TCP
+          port: 5432                        # Example: Allow TCP traffic to port 5432 (PostgreSQL)
