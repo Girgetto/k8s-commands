@@ -1,0 +1,49 @@
+apiVersion: apps/v1              # API version for the Deployment resource
+kind: Deployment                 # Type of resource to create
+metadata:
+  name: webserver-deployment     # Name of the Deployment
+  labels:
+    app: webserver               # Labels to apply to the Deployment for identifying and organizing resources
+spec:
+  replicas: 3                    # Number of pod instances
+  selector:
+    matchLabels:
+      app: webserver             # Selector that determines which Pods belong to the Deployment
+  template:                      # Template for the pods that are managed by this Deployment
+    metadata:
+      labels:
+        app: webserver           # Labels applied to all Pods created from this template, must match the selector
+    spec:
+      initContainers:            # List of init containers that run before the app containers are started
+      - name: init-myservice
+        image: busybox
+        command: ['sh', '-c', 'echo The app is starting; sleep 10'] # Example command
+      containers:
+      - name: webserver          # Name of the container within the Pod
+        image: nginx:1.17        # Container image to use
+        ports:
+        - containerPort: 80      # Port the container is listening on
+        livenessProbe:           # Probe to determine the health of the container
+          httpGet:
+            path: /              # Path to check for liveness
+            port: 80             # Port to check for liveness
+          initialDelaySeconds: 15 # Delay before starting the liveness probe
+          timeoutSeconds: 2      # Number of seconds after which the probe times out
+          periodSeconds: 5       # How often (in seconds) to perform the probe
+          failureThreshold: 3    # Number of times to retry the probe before giving up
+        readinessProbe:          # Probe to determine if the container is ready to serve traffic
+          httpGet:
+            path: /              # Path to check for readiness
+            port: 80             # Port to check for readiness
+          initialDelaySeconds: 5 # Delay before starting the readiness probe
+          timeoutSeconds: 2      # Number of seconds after which the probe times out
+          periodSeconds: 5       # How often (in seconds) to perform the probe
+          successThreshold: 1    # Minimum consecutive successes for the probe to be considered successful
+        resources:               # Resource requests and limits for the container
+          requests:
+            cpu: "100m"          # Minimum amount of CPU the container can use
+            memory: "200Mi"      # Minimum amount of memory the container can use
+          limits:
+            cpu: "500m"          # Maximum amount of CPU the container can use
+            memory: "500Mi"      # Maximum amount of memory the container can use
+      restartPolicy: Always       # Restart policy for all containers within the pod
