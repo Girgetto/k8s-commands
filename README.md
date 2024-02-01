@@ -1,4 +1,4 @@
-# Advanced Kubernetes Commands for CKAD Exam
+# Kubernetes Commands
 
 Expand your `kubectl` toolkit with these commands, tailored for tasks and challenges you might face during the CKAD exam.
 
