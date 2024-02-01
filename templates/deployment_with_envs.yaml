@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deployment
+  labels:
+    app: webserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - name: webserver
+        image: nginx:1.17
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENV_FROM_LITERAL        # Environment variable from a literal value
+          value: "LiteralValue"
+        - name: DATABASE_URL            # Environment variable from the ConfigMap
+          valueFrom:
+            configMapKeyRef:
+              name: app-config          # The name of the ConfigMap
+              key: DATABASE_URL         # The key to fetch from the ConfigMap
+        - name: API_KEY                 # Environment variable from the Secret (literal value)
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets         # The name of the Secret
+              key: API_KEY              # The key to fetch from the Secret
