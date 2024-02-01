@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deployment
+  labels:
+    app: webserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - name: webserver
+        image: nginx:1.17
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: my-pvc-storage            # This name must match the volume name below
+          mountPath: /usr/share/nginx/html # Container path where the volume should be mounted
+      volumes:
+      - name: my-pvc-storage              # Volume name, referenced in volumeMounts
+        persistentVolumeClaim:
+          claimName: my-pvc               # The name of the PVC to bind
