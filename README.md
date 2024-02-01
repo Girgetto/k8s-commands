@@ -1,72 +1,75 @@
-# Helpful Kubernetes Commands
+# Advanced Kubernetes Commands for CKAD Exam
 
-This document lists some of the most commonly used `kubectl` commands along with a brief description of their purpose in managing Kubernetes resources.
+Expand your `kubectl` toolkit with these commands, tailored for tasks and challenges you might face during the CKAD exam.
 
-## Cluster Management
+## Working with Specific Namespaces
 
-- `kubectl get nodes`: List all nodes in the cluster.  
-  _Shows the status of each node._
+- `kubectl get pods --namespace <name>`: List all pods in a specific namespace.  
+  _Targets operations in a given namespace._
 
-- `kubectl cluster-info`: Display cluster info.  
-  _Provides high-level information about the cluster._
+- `kubectl config set-context --current --namespace=<name>`: Set the default namespace for subsequent commands in the current context.  
+  _Streamlines command execution in a specific namespace._
 
-## Working with Namespaces
+## Resource Inspection and Troubleshooting
 
-- `kubectl get namespaces`: List all namespaces in the cluster.  
-  _Helps with organizing resources._
+- `kubectl describe nodes <node-name>`: Show details of a specific node, including allocated resources, labels, and status conditions.  
+  _Essential for node-level troubleshooting._
 
-- `kubectl create namespace <name>`: Create a new namespace.  
-  _Useful for separating environments._
+- `kubectl get pod <pod-name> -o yaml`: Output the configuration of the specified pod in YAML format.  
+  _Useful for debugging and understanding pod configurations._
 
-## Deploying Applications
+- `kubectl top pod <pod-name>`: Display CPU and memory usage for a specific pod.  
+  _Helps identify resource bottlenecks._
 
-- `kubectl create -f <filename>`: Create a resource from a YAML or JSON file.  
-  _For deploying applications or other resources._
+## Resource Management and Scaling
 
-- `kubectl apply -f <filename>`: Apply a configuration to a resource from a file.  
-  _Ideal for updating applications or configurations._
+- `kubectl scale deployment <deployment-name> --replicas=<num>`: Scale a deployment to a specific number of replicas.  
+  _Quickly adjust the scale of applications._
 
-## Monitoring and Troubleshooting
+- `kubectl autoscale deployment <deployment-name> --min=<min> --max=<max> --cpu-percent=<target>`: Automatically scale a deployment based on CPU usage.  
+  _Implements automatic scaling based on load._
 
-- `kubectl get pods`: List all pods in the current namespace.  
-  _Shows the status of each pod._
+## Updating and Rolling Back Deployments
 
-- `kubectl logs <pod-name>`: Print the logs for a container in a pod.  
-  _Useful for troubleshooting applications._
+- `kubectl set image deployment/<deployment-name> <container-name>=<image>:<tag>`: Update the image of a deployment.  
+  _Triggers a rolling update of pods._
 
-- `kubectl describe pod <pod-name>`: Show detailed information about a pod.  
-  _Provides insights into pod status, events, and more._
+- `kubectl rollout status deployment/<deployment-name>`: Watch the progress of a rolling update.  
+  _Ensures updates proceed as expected._
 
-## Managing Resources
+- `kubectl rollout undo deployment/<deployment-name>`: Rollback to the previous deployment.  
+  _Quick recovery from faulty deployments._
 
-- `kubectl get all`: List all resources in the current namespace.  
-  _Gives an overview of what's running._
+## ConfigMaps and Secrets
 
-- `kubectl delete -f <filename>`: Delete resources specified in a YAML or JSON file.  
-  _For cleaning up applications or resources._
+- `kubectl create configmap <map-name> --from-literal=key=value`: Create a ConfigMap from literal values.  
+  _For externalizing configuration._
 
-## Interacting with Running Pods
+- `kubectl create secret generic <secret-name> --from-file=path/to/bar`: Create a secret from a file.  
+  _Securely manages sensitive information._
 
-- `kubectl exec -it <pod-name> -- /bin/bash`: Execute an interactive bash shell in the specified pod.  
-  _Allows for direct interaction with a running container._
+## Working with Persistent Data
 
-- `kubectl port-forward <pod-name> <local-port>:<pod-port>`: Forward one or more local ports to a pod.  
-  _Useful for debugging or directly accessing pod services._
+- `kubectl get pv`: List all PersistentVolumes in the cluster.  
+  _Overview of storage resources._
 
-## Configuration and Secrets
+- `kubectl get pvc`: List all PersistentVolumeClaims in the current namespace.  
+  _Tracks storage claims by pods._
 
-- `kubectl create secret generic <secret-name> --from-literal=key=value`: Create a new secret.  
-  _For storing and managing sensitive information._
+## Advanced Resource Queries
 
-- `kubectl get configmap`: List all configmaps in the current namespace.  
-  _For configuration management._
+- `kubectl get pods --selector=app=cassandra`: List all pods that match a specific label selector.  
+  _Filters resources based on labels._
 
-## Role-Based Access Control (RBAC)
+- `kubectl explain pods`: Get the documentation of the Pod resource.  
+  _Deepens understanding of resource specifications._
 
-- `kubectl create role <role-name> --verb=get,list,watch --resource=pods`: Create a role with specific permissions.  
-  _For defining access control._
+## Using Labels and Annotations
 
-- `kubectl create rolebinding <name> --role=<role-name> --user=<user-name>`: Bind a role to a user.  
-  _Applies the access control defined in a role to a user or set of users._
+- `kubectl label pods <pod-name> key=value`: Add a new label to a pod.  
+  _For organizing and selecting subsets of resources._
 
-This guide offers a starting point for managing Kubernetes resources and applications. For more detailed information, refer to the official Kubernetes documentation.
+- `kubectl annotate pods <pod-name> key=value`: Add an annotation to a pod.  
+  _Stores additional, non-identifying information on resources._
+
+This expanded set of commands is designed to cover a wide range of tasks and challenges you may encounter during the CKAD exam, from basic resource management to more complex operations and troubleshooting.
